@@ -1,19 +1,23 @@
 {
-  "name": "@ii887522/dynv6-ip-update-client",
-  "version": "2.0.0",
+  "name": "another-dynv6-ddns-client",
+  "version": "2.0.1",
   "description": "It can update IP addresses of existing DNS records created in dynv6 which is a platform for getting public hostnames for your dynamic IPv4 and IPv6 addresses with the latest IP addresses from the client.",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": "dynv6-client.exe",
   "type": "module",
+  "engines": {
+    "node": "14.15.3",
+    "npm": "6.14.9"
+  },
   "scripts": {
     "lint": "ts-standard",
-    "build": "tsc",
+    "build": "tsc & nexe index.js -o dynv6-client.exe",
     "build:watch": "tsc --watch",
-    "start": "node index.js"
+    "test": "node index.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ii887522/dynv6-ip-update-client.git"
+    "url": "git+https://github.com/zfang1995/dynv6-ip-update-client.git"
   },
   "keywords": [
     "dns",
@@ -24,19 +28,20 @@
     "dynv6",
     "dynv6-dns-ip"
   ],
-  "author": "ii887522",
+  "author": "ii887522, zfang1995",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ii887522/dynv6-ip-update-client/issues"
+    "url": "https://github.com/zfang1995/dynv6-ip-update-client/issues"
   },
-  "homepage": "https://github.com/ii887522/dynv6-ip-update-client#readme",
+  "homepage": "https://github.com/zfang1995/dynv6-ip-update-client#readme",
   "ts-standard": {
     "ignore": ["**/*.js"]
   },
   "devDependencies": {
     "@types/node": "^17.0.12",
     "ts-standard": "^11.0.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.5.5",
+    "nexe": "^4.0.0-rc.1"
   },
   "dependencies": {
     "@ii887522/hydro": "^2.0.1",
