@@ -13,7 +13,7 @@ axiosRetry(
   axios, { retries: 16, retryDelay: exponentialDelay, retryCondition: error => error.response === undefined || (error.response.status >= 400 && error.response.status < 600) }
 )
 
-async function updateRecords (zone: Zone, ipv6Address: string): Promise<void> {
+let updateRecords = async function updateRecords (zone: Zone, ipv6Address: string): Promise<void> {
   for (
     const record of (await axios.get(
       `${constants.dynv6ApiEndpoint}/zones/${zone.id}/records`,
@@ -30,7 +30,7 @@ async function updateRecords (zone: Zone, ipv6Address: string): Promise<void> {
   }
 }
 
-function updateZone (zone: Zone, ipv6Address: string): void {
+let updateZone = function updateZone (zone: Zone, ipv6Address: string): void {
   consume(
     axios.patch(
       `${constants.dynv6ApiEndpoint}/zones/${zone.id}`,
@@ -41,10 +41,14 @@ function updateZone (zone: Zone, ipv6Address: string): void {
   consume(updateRecords(zone, ipv6Address))
 }
 
-async function update (): Promise<void> {
-  const ipv6AddressPromise = publicIp.v6()
-  for (const zone of (await axios.get(`${constants.dynv6ApiEndpoint}/zones`, { headers: { Authorization: `Bearer ${process.argv[constants.httpTokenIndex] ?? ''}` } })).data) {
-    updateZone(zone, await ipv6AddressPromise)
+let recordedIpv6Address: string;
+let update = async function update (): Promise<void> {
+  let currentIpv6Address = await publicIp.v6();
+  if (recordedIpv6Address !== currentIpv6Address) {
+    for (const zone of (await axios.get(`${constants.dynv6ApiEndpoint}/zones`, { headers: { Authorization: `Bearer ${process.argv[constants.httpTokenIndex] ?? ''}` } })).data) {
+      updateZone(zone, currentIpv6Address)
+    }
+    recordedIpv6Address = currentIpv6Address;
   }
 }
 
